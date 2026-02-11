@@ -1,0 +1,7 @@
+{
+  "name": "GyanGuru: AI Powered Learning Assistant for AI & ML",
+  "description": "An AI-powered web application to learn Machine Learning concepts through multiple interactive modalities like text, code, audio, and visuals, leveraging Google's Gemini API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
