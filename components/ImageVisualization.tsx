@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { generateImagePrompts, generateImage } from '../services/geminiService';
@@ -15,7 +14,9 @@ const ImageVisualization: React.FC = () => {
     const { markStepAsCompleted, cachedContent, addCachedContent } = usePathway();
     const { openApiKeyModal } = useUIAction(); // Use the UIActionContext
     const [topic, setTopic] = useState('');
-    const [detailLevel, setDetailLevel] = useState<DetailLevel>(DetailLevel.DETAILED);
+    // DetailLevel is now fixed for image generation, no longer a user-selectable state.
+    // const [detailLevel, setDetailLevel] = useState<DetailLevel>(DetailLevel.DETAILED);
+    const fixedDetailLevel: DetailLevel = DetailLevel.DETAILED; // Use a fixed detail level
     const [prompts, setPrompts] = useState<string[]>([]);
     const [images, setImages] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +37,8 @@ const ImageVisualization: React.FC = () => {
             return;
         }
         
-        const cacheKey = `images-${topic}-${detailLevel}`;
+        // Update cacheKey to not include variable detailLevel
+        const cacheKey = `images-${topic}-${fixedDetailLevel}`;
         if (cachedContent.has(cacheKey)) {
             const cachedData = cachedContent.get(cacheKey);
             setPrompts(cachedData.prompts);
@@ -52,7 +54,8 @@ const ImageVisualization: React.FC = () => {
 
         try {
             setLoadingMessage('Generating visualization concepts...');
-            const generatedPrompts = await generateImagePrompts(topic, detailLevel);
+            // Use fixedDetailLevel when generating prompts
+            const generatedPrompts = await generateImagePrompts(topic, fixedDetailLevel);
             setPrompts(generatedPrompts);
 
             const imagePromises = generatedPrompts.map((prompt, index) => {
@@ -85,13 +88,12 @@ const ImageVisualization: React.FC = () => {
             <Controls
                 topic={topic}
                 setTopic={setTopic}
-                detailLevel={detailLevel}
-                setDetailLevel={setDetailLevel}
+                // Removed detailLevel and setDetailLevel props
                 onGenerate={handleGenerate}
                 isLoading={isLoading}
                 buttonText="Generate Images"
                 topicPlaceholder="e.g., convolutional neural network architecture"
-                detailLevelLabel="Detail Level"
+                // No detailLevelLabel needed here as the control is hidden
             />
             
             {error && <div className="mt-4 text-red-700 bg-red-100 p-3 rounded-md border border-red-200">{error}</div>}

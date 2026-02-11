@@ -1,7 +1,6 @@
-
 import React, { useState, useCallback } from 'react';
 import { HashRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { BookOpen, Code, Headphones, Image as ImageIcon, Home, Target, HelpCircle, GitMerge, Cog } from 'lucide-react';
+import { BookOpen, Code, Headphones, Image as ImageIcon, Home, Target, HelpCircle, Cog } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import TextExplanation from './components/TextExplanation';
 import CodeGeneration from './components/CodeGeneration';
@@ -9,7 +8,6 @@ import AudioLearning from './components/AudioLearning';
 import ImageVisualization from './components/ImageVisualization';
 import Practice from './components/Practice';
 import QandA from './components/QandA';
-import LearningPathway from './components/LearningPathway';
 import { PathwayProvider } from './context/PathwayContext';
 import { ApiKeyModal } from './components/common/ApiKeyModal';
 import { UIActionProvider } from './context/UIActionContext'; // Import UIActionProvider
@@ -30,7 +28,6 @@ const App: React.FC = () => {
             <main className="flex-grow container mx-auto px-4 py-8">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/pathway" element={<LearningPathway />} />
                 <Route path="/text" element={<TextExplanation />} />
                 <Route path="/code" element={<CodeGeneration />} />
                 <Route path="/audio" element={<AudioLearning />} />
@@ -66,7 +63,6 @@ const Navbar: React.FC<{onSettingsClick: () => void}> = ({ onSettingsClick }) =>
           <div className="flex items-center">
             <div className="hidden md:flex items-center space-x-1">
               <NavLink to="/" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}><Home className="w-4 h-4 mr-2" /> Home</NavLink>
-              <NavLink to="/pathway" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}><GitMerge className="w-4 h-4 mr-2" /> Pathway</NavLink>
               <NavLink to="/text" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}><BookOpen className="w-4 h-4 mr-2" /> Text</NavLink>
               <NavLink to="/code" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}><Code className="w-4 h-4 mr-2" /> Code</NavLink>
               <NavLink to="/audio" className={({ isActive }) => `${navLinkClasses} ${isActive ? activeLinkClasses : ''}`}><Headphones className="w-4 h-4 mr-2" /> Audio</NavLink>

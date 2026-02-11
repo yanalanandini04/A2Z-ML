@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Code, Headphones, Image as ImageIcon, Rocket, BrainCircuit, ShieldCheck, Target, HelpCircle, GitMerge } from 'lucide-react';
+import { BookOpen, Code, Headphones, Image as ImageIcon, Rocket, BrainCircuit, ShieldCheck, Target, HelpCircle } from 'lucide-react';
 
 const FeatureCard: React.FC<{ to: string; icon: React.ReactNode; title: string; description: string; }> = ({ to, icon, title, description }) => (
     <Link to={to} className="bg-white p-6 rounded-lg border border-slate-200 hover:shadow-lg hover:border-indigo-300 transition-all duration-300 transform hover:-translate-y-1 group relative overflow-hidden">
@@ -42,12 +41,13 @@ const Dashboard: React.FC = () => {
             <section>
                 <h2 className="text-3xl font-bold text-center mb-8 text-slate-800">Choose Your Learning Tool</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Removed Pathway Card:
                     <FeatureCard
                         to="/pathway"
                         icon={<GitMerge size={24} />}
                         title="Learning Pathway"
                         description="Enter your learning goal and get a customized, step-by-step roadmap to mastery."
-                    />
+                    /> */}
                     <FeatureCard
                         to="/text"
                         icon={<BookOpen size={24} />}

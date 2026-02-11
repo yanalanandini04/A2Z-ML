@@ -1,12 +1,11 @@
-
 import React from 'react';
 import { DetailLevel } from '../../types';
 
 interface ControlsProps {
     topic: string;
     setTopic: (topic: string) => void;
-    detailLevel: DetailLevel;
-    setDetailLevel: (level: DetailLevel) => void;
+    detailLevel?: DetailLevel; // Made optional
+    setDetailLevel?: (level: DetailLevel) => void; // Made optional
     onGenerate: () => void;
     isLoading: boolean;
     buttonText: string;
@@ -18,7 +17,7 @@ export const Controls: React.FC<ControlsProps> = ({
     topic,
     setTopic,
     detailLevel,
-    setDetailLevel,
+    setDetailLevel, // Destructure as optional
     onGenerate,
     isLoading,
     buttonText,
@@ -40,21 +39,23 @@ export const Controls: React.FC<ControlsProps> = ({
                     className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 />
             </div>
-            <div>
-                <label htmlFor="length" className="block text-sm font-medium text-slate-700 mb-1">
-                    {detailLevelLabel}
-                </label>
-                <select
-                    id="length"
-                    value={detailLevel}
-                    onChange={(e) => setDetailLevel(e.target.value as DetailLevel)}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                >
-                    <option value={DetailLevel.BRIEF}>Brief - Quick summary</option>
-                    <option value={DetailLevel.DETAILED}>Detailed - In-depth explanation</option>
-                    <option value={DetailLevel.COMPREHENSIVE}>Comprehensive - Exhaustive coverage</option>
-                </select>
-            </div>
+            {setDetailLevel && ( // Conditionally render detail level if setter is provided
+                <div>
+                    <label htmlFor="length" className="block text-sm font-medium text-slate-700 mb-1">
+                        {detailLevelLabel}
+                    </label>
+                    <select
+                        id="length"
+                        value={detailLevel}
+                        onChange={(e) => setDetailLevel(e.target.value as DetailLevel)}
+                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                        <option value={DetailLevel.BRIEF}>Brief - Quick summary</option>
+                        <option value={DetailLevel.DETAILED}>Detailed - In-depth explanation</option>
+                        <option value={DetailLevel.COMPREHENSIVE}>Comprehensive - Exhaustive coverage</option>
+                    </select>
+                </div>
+            )}
             <button
                 onClick={onGenerate}
                 disabled={isLoading}

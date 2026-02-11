@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback, useEffect } from 'react';
 import { PathwayStep } from '../types';
 
 interface PathwayContextType {
@@ -16,10 +16,46 @@ interface PathwayContextType {
 const PathwayContext = createContext<PathwayContextType | undefined>(undefined);
 
 export const PathwayProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [goal, setGoal] = useState('');
-    const [pathway, setPathway] = useState<PathwayStep[] | null>(null);
-    const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
+    // Initialize state from localStorage or default values
+    const [goal, setGoal] = useState(() => localStorage.getItem('learningGoal') || '');
+    const [pathway, setPathway] = useState<PathwayStep[] | null>(() => {
+        const storedPathway = localStorage.getItem('learningPathway');
+        try {
+            return storedPathway ? JSON.parse(storedPathway) : null;
+        } catch (e) {
+            console.error("Failed to parse stored pathway from localStorage:", e);
+            return null; // Return null if parsing fails
+        }
+    });
+    const [completedSteps, setCompletedSteps] = useState<Set<string>>(() => {
+        const storedCompletedSteps = localStorage.getItem('completedLearningSteps');
+        try {
+            return storedCompletedSteps ? new Set(JSON.parse(storedCompletedSteps)) : new Set();
+        } catch (e) {
+            console.error("Failed to parse stored completed steps from localStorage:", e);
+            return new Set();
+        }
+    });
     const [cachedContent, setCachedContent] = useState<Map<string, any>>(new Map());
+
+    // Effect to persist goal to localStorage
+    useEffect(() => {
+        localStorage.setItem('learningGoal', goal);
+    }, [goal]);
+
+    // Effect to persist pathway to localStorage
+    useEffect(() => {
+        if (pathway) {
+            localStorage.setItem('learningPathway', JSON.stringify(pathway));
+        } else {
+            localStorage.removeItem('learningPathway'); // Clear if pathway becomes null
+        }
+    }, [pathway]);
+
+    // Effect to persist completedSteps to localStorage
+    useEffect(() => {
+        localStorage.setItem('completedLearningSteps', JSON.stringify(Array.from(completedSteps)));
+    }, [completedSteps]);
 
     const markStepAsCompleted = (stepTitle: string) => {
         setCompletedSteps(prev => {
@@ -31,6 +67,7 @@ export const PathwayProvider: React.FC<{ children: ReactNode }> = ({ children })
     
     const resetCompletedSteps = () => {
         setCompletedSteps(new Set());
+        localStorage.removeItem('completedLearningSteps'); // Explicitly clear from localStorage
     }
 
     const addCachedContent = useCallback((key: string, data: any) => {
